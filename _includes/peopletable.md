@@ -7,10 +7,18 @@
   <section>
     <div class="row">
       {% for item_person in people %} 
-        <div class="media col-md-6">
+        {% assign photo_path = item_person.path | split:"." | first | append:".jpg" %}
+        {% capture photo_exists %}{% file_exists {{ photo_path }} %}{% endcapture %}
+        {% if photo_exists == 'true' %}
+          {% assign photo_url = photo_path | remove: "_" | prepend: "/" | prepend: site.baseurl %}
+        {% else %}
+          {% assign photo_url = "default.jpg" | prepend: "/people/" | prepend: site.baseurl %}
+        {% endif %}
+        <div class="media col-md-4">
           <div class="media-left">
             <div class="media-object">
-              <img src="{{ site.baseurl }}/logos/twitter.png" class="img-circle"/>
+              {% assign assuming_photo_exists_url = photo_path | prepend: "/" | prepend: site.baseurl %}
+              <img src="{{ photo_url }}" class="img-circle"/>
             </div>
           </div>
           <div class="media-body">
@@ -23,14 +31,14 @@
                 {{index}}
               </a>
             </h4>
-            {% for item_position in item_person.position %}
-              {{ item_position.unit }}
+            {% for item_position in item_person.positions %}
+              {{ item_position.affiliation }}
               <br />
             {% endfor %}
             <br />
           </div>
         </div>
-        {% assign loopindex = forloop.index | modulo: 2 %}
+        {% assign loopindex = forloop.index | modulo: 3 %}
         {% if loopindex == 0 %}
           <div class="col-md-12"></div>
         {% endif %}

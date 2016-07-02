@@ -1,3 +1,7 @@
-invoke
+# This file compiled from requirements3.in.in
+
+invoke==0.12.2
+jinja2
 nose
-pyyaml --global-option='--without-libyaml'
+pip-tools --global-option='--without-libyaml'
+pyyaml
